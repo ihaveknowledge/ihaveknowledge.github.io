@@ -10,7 +10,10 @@ d3.csv("prices.csv")
 
     var max = d3.max(data, function(d){ return d.price;});
     var minDate = d3.min(data, function(d){ return d.month;});
-    var maxDate = d3.min(data, function(d){ return d.month;});
+    //console.log(minDate);
+
+    var maxDate = d3.max(data, function(d){ return d.month;});
+    //console.log(maxDate);
 
     var y = d3.scaleLinear()
                   .domain([0, max])
