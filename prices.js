@@ -30,8 +30,8 @@ d3.csv("prices.csv")
                 .attr("transform", "translate("+ margin.left +", "+ margin.top +")");
 
     var line = d3.line()
-                    .x(function(d){ return d.month ;})
-                    .y(function(d){ return d.price ;});
+                    .x(function(d){ return x(d.month) ;})
+                    .y(function(d){ return y(d.price) ;});
 
     chartGroup.append("path").attr("d",line(data));
     chartGroup.append("g").attr("class", "x axis").attr("transform","translate(0,"+ height +")").call(xAxis);
