@@ -22,7 +22,7 @@ d3.csv("prices.csv")
     var yAxis = d3.axisLeft(y);
     var xAxis = d3.axisBottom(x);
 
-    var svg = d3.select("body".append("svg").attr("height","100%").attr("width","100%");
+    var svg = d3.select("body").append("svg").attr("height","100%").attr("width","100%");
 
     var margin = {left:50, right:50, top:40, bottom:0};
 
