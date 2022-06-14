@@ -1,17 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>D3.js Essential Training for Data Scientists</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script type="text/javascript" src="d3.v4.js"></script>
-  </head>
-
-  <body>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
 
 
-    <script type="text/javascript" src="prices.js"></script>
-  </body>
+    </head>
+    <body>
 
+          <div id="container"></div>
+            <p>
+                This is a test to see if I can create a JavaScript enabled web page that runs on my machine <strong>WITHOUT</strong> a web server!
+            </p>
+            <p>Resize the browser window to fire the <code>resize</code> event.</p>
+            <p>Window height: <span id="height"></span></p>
+            <p>Window width: <span id="width"></span></p>
+
+            <div id = "c2">
+              <button  class="button" id="draw" onclick="draw_circles()">Create Circles</button>
+              <button  class="button" id="draw" onclick="draw_squares()">Create Squares</button>
+              <button  class="button" id="clean" onclick="clean_board()">Erase Everything</button>
+            </div>
+
+
+
+
+
+
+
+
+    </body>
+    <footer>
+      <script src="visuals.js"></script>
+    </footer>
 
 </html>
