@@ -3,12 +3,6 @@
 var myArray = ["#ff0000", "#0000ff", "#00ff40", "#ff00bf", "#ff8000", "#ffff00"];
 var opac = 0.2
 
-if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  // dark mode
-  myArray = ["#ffffff", "#ffffe6", "#ccd9ff", "#ffe6f9", "#e6ffcc", "#ffe66cc"];
-  opac = 0.5
-}
-
 
 var w = window.innerWidth * 0.9;
 var h = window.innerHeight - 230;
