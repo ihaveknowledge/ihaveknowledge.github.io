@@ -19,10 +19,11 @@ var circleCount = 0;
 
 const heightOutput = document.querySelector('#height');
 const widthOutput = document.querySelector('#width');
+const dmodeOutput = document.querySelector('#dmode');
 
 heightOutput.textContent = window.innerHeight;
 widthOutput.textContent = window.innerWidth;
-
+dmodeOutput.textContent = window.matchMedia('(prefers-color-scheme: dark)').matches
 
 function clean_board() {
     myCircles = d3.selectAll("circle")._groups[0];
