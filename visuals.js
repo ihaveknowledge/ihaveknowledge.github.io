@@ -1,6 +1,14 @@
 
 // Create variables here
-var myArray = ["red", "blue", "green", "pink", "orange", "yellow"];
+var myArray = ["#ff0000", "#0000ff", "#00ff40", "#ff00bf", "#ff8000", "#ffff00"];
+var opac = 0.2
+
+if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  // dark mode
+  myArray = ["#ffffff", "#ffffe6", "#ccd9ff", "#ffe6f9", "#e6ffcc", "#ffe66cc"];
+  opac = 0.5
+}
+
 
 var w = window.innerWidth * 0.9;
 var h = window.innerHeight - 230;
@@ -53,7 +61,7 @@ function draw_squares() {
         .attr("height", Math.random()*200)
         .attr("x", Math.random()*w)
         .attr("y", Math.random()*h)
-        .style("opacity", 0.2)
+        .style("opacity", opac)
         .style("fill", randomColour);
 
   }
