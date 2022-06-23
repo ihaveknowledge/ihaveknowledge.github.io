@@ -7,7 +7,7 @@ var opac = 0.2
 var w = window.innerWidth * 0.9;
 var h = window.innerHeight - 230;
 var newShapes = 25;
-var svg = d3.select("#c2").append("svg").attr("width", w).attr("height", h);
+var svg = d3.select("#canvas").append("svg").attr("width", w).attr("height", h);
 var randomColour = myArray[Math.floor(Math.random()*myArray.length)];
 var circleCount = 0;
 
