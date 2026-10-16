@@ -118,6 +118,25 @@
       touch-action: none;
     }
 
+    /* Crosshair tap animation indicator for clear visual touch feedback */
+    .crosshair-fx {
+      position: absolute;
+      pointer-events: none;
+      width: 44px;
+      height: 44px;
+      margin-left: -22px;
+      margin-top: -22px;
+      border: 2px dashed #ffeb3b;
+      border-radius: 50%;
+      animation: tapRing 0.28s ease-out forwards;
+      z-index: 7;
+    }
+
+    @keyframes tapRing {
+      0% { transform: scale(0.4); opacity: 1; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+
     /* CRT scanline simulation layer */
     .scanlines {
       position: absolute;
@@ -420,6 +439,9 @@
     let cameraShake = 0;
     let lastSpawnTime = 0;
 
+    // Tap indicator markers
+    let tapRings = [];
+
     // Strict quota constraints
     let eagleSpawned = 0;         // Max 1
     let eagleShotThreshold = 0;   // Appears when shotsLeft <= threshold
@@ -442,22 +464,55 @@
     window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 150));
     resizeCanvas();
 
-    /* Precise Touch / Pointer Mapping */
+    /* Precise Touch / Pointer Mapping accounting for object-fit letterboxing */
+    function getCanvasCoordinates(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+      const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+
+      // Account for aspect ratio fitting inside canvas box
+      const canvasAspect = V_WIDTH / V_HEIGHT;
+      const displayAspect = rect.width / rect.height;
+
+      let actualWidth = rect.width;
+      let actualHeight = rect.height;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      if (displayAspect > canvasAspect) {
+        // Pillarboxed (bars on left/right)
+        actualWidth = rect.height * canvasAspect;
+        offsetX = (rect.width - actualWidth) / 2;
+      } else {
+        // Letterboxed (bars on top/bottom)
+        actualHeight = rect.width / canvasAspect;
+        offsetY = (rect.height - actualHeight) / 2;
+      }
+
+      const relativeX = clientX - rect.left - offsetX;
+      const relativeY = clientY - rect.top - offsetY;
+
+      const scaleX = V_WIDTH / actualWidth;
+      const scaleY = V_HEIGHT / actualHeight;
+
+      return {
+        x: Math.max(0, Math.min(V_WIDTH, relativeX * scaleX)),
+        y: Math.max(0, Math.min(V_HEIGHT, relativeY * scaleY)),
+        screenX: clientX,
+        screenY: clientY
+      };
+    }
+
     function handleScreenPointer(e) {
       e.preventDefault();
       sound.init(); // Auto unlock audio context on mobile
 
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = V_WIDTH / rect.width;
-      const scaleY = V_HEIGHT / rect.height;
+      const coords = getCanvasCoordinates(e);
 
-      const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-      const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+      // Add a quick visual touch reticle directly where tapped
+      tapRings.push({ x: coords.x, y: coords.y, life: 12, maxLife: 12 });
 
-      const x = (clientX - rect.left) * scaleX;
-      const y = (clientY - rect.top) * scaleY;
-
-      fireShot(x, y);
+      fireShot(coords.x, coords.y);
     }
 
     // Use pointerdown with touch-action:none for zero-delay response
@@ -512,17 +567,18 @@
         this.isDuck = this.type === 'DUCK';
         this.isGoose = this.type === 'GOOSE';
 
+        // Generous mobile-friendly touch radii (+25px touch forgiveness for easy tapping)
         if (this.isEagle) {
           this.points = -100;
-          this.hitRadius = 56;
+          this.hitRadius = 68; // Large sprite, prominent hitbox
           this.animSpeed = 0.1;
         } else if (this.isDuck) {
           this.points = 10;
-          this.hitRadius = 38;
+          this.hitRadius = 60; // Expanded for finger taps (was 38)
           this.animSpeed = 0.2;
         } else {
           this.points = 5;
-          this.hitRadius = 36;
+          this.hitRadius = 58; // Expanded for finger taps (was 36)
           this.animSpeed = 0.22;
         }
 
@@ -611,7 +667,7 @@
     class Deer {
       constructor() {
         this.points = 50;
-        this.hitRadius = 42;
+        this.hitRadius = 64; // Generous ground hit target (was 42)
         this.fromLeft = Math.random() < 0.5;
         this.x = this.fromLeft ? -70 : V_WIDTH + 70;
         this.y = GROUND_Y - 24;
@@ -1307,6 +1363,28 @@
       // Bushes
       renderBush(190, GROUND_Y + 8, 80);
       renderBush(480, GROUND_Y + 8, 90);
+
+      // Tap Target Rings (visual confirmation of touch position)
+      for (let i = tapRings.length - 1; i >= 0; i--) {
+        const ring = tapRings[i];
+        const progress = 1 - (ring.life / ring.maxLife);
+        const radius = 8 + progress * 24;
+        ctx.strokeStyle = `rgba(255, 235, 59, ${ring.life / ring.maxLife})`;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(ring.x, ring.y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Cross lines
+        const cl = 6;
+        ctx.beginPath();
+        ctx.moveTo(ring.x - cl, ring.y); ctx.lineTo(ring.x + cl, ring.y);
+        ctx.moveTo(ring.x, ring.y - cl); ctx.lineTo(ring.x, ring.y + cl);
+        ctx.stroke();
+
+        ring.life--;
+        if (ring.life <= 0) tapRings.splice(i, 1);
+      }
 
       // Popups
       for (let i = popups.length - 1; i >= 0; i--) {
