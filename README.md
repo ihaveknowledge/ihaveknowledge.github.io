@@ -1,2 +1,2 @@
 # ihaveknowledge.github.io
-My new homepage
+This is a game Gemini has made with some input from me
