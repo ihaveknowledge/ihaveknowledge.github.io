@@ -16,42 +16,46 @@
     }
 
     body {
-      background-color: #0d0e15;
-      background-image: radial-gradient(#1f2233 15%, transparent 16%), radial-gradient(#181a27 15%, transparent 16%);
-      background-size: 30px 30px;
-      background-position: 0 0, 15px 15px;
+      background-color: #0b0c14;
+      background-image: radial-gradient(#1e2130 15%, transparent 16%), radial-gradient(#151824 15%, transparent 16%);
+      background-size: 28px 28px;
+      background-position: 0 0, 14px 14px;
       color: #fff;
-      font-family: 'Press Start 2P', monospace, monospace;
+      font-family: 'Press Start 2P', monospace;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       overflow-x: hidden;
-      padding: 12px;
+      padding: 10px;
     }
 
     .arcade-wrapper {
       position: relative;
       padding: 16px;
-      background: #2b1f1d;
+      background: #2a1b18;
       border: 6px solid #4a3429;
       border-radius: 18px;
-      box-shadow: 0 0 35px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.95), inset 0 0 20px rgba(0, 0, 0, 0.8);
+      max-width: 100%;
     }
 
     .marquee-header {
-      background: #e64522;
-      border: 4px solid #fff;
+      background: #d32f2f;
+      border: 4px solid #ffffff;
       color: #ffeb3b;
-      text-shadow: 3px 3px 0 #b71c1c, 5px 5px 0 #000;
+      text-shadow: 3px 3px 0 #7f0000, 5px 5px 0 #000;
       text-align: center;
-      padding: 8px 12px;
+      padding: 10px 14px;
       margin-bottom: 12px;
-      border-radius: 6px;
-      font-size: 18px;
+      border-radius: 8px;
+      font-size: 17px;
       letter-spacing: 2px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .screen-bezel {
@@ -59,7 +63,7 @@
       background: #111;
       padding: 12px;
       border-radius: 12px;
-      box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
       border: 4px solid #1c1d24;
     }
 
@@ -71,6 +75,8 @@
       image-rendering: pixelated;
       image-rendering: crisp-edges;
       cursor: crosshair;
+      max-width: 100%;
+      height: auto;
     }
 
     /* CRT scanline simulation */
@@ -83,7 +89,7 @@
       pointer-events: none;
       background: linear-gradient(
         rgba(18, 16, 16, 0) 50%, 
-        rgba(0, 0, 0, 0.35) 50%
+        rgba(0, 0, 0, 0.32) 50%
       );
       background-size: 100% 4px;
       border-radius: 6px;
@@ -97,7 +103,7 @@
       right: 12px;
       bottom: 12px;
       pointer-events: none;
-      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+      box-shadow: inset 0 0 45px rgba(0, 0, 0, 0.7);
       border-radius: 6px;
       z-index: 11;
     }
@@ -107,9 +113,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
       color: #9e9e9e;
-      font-size: 10px;
-      padding: 0 6px;
+      font-size: 9px;
+      padding: 0 4px;
     }
 
     .btn-toggle {
@@ -129,12 +137,33 @@
       transform: translateY(2px);
       box-shadow: 0 1px 0 #263238;
     }
+
+    .legend-bar {
+      display: flex;
+      gap: 12px;
+      font-size: 8px;
+      margin-top: 8px;
+      background: #181c22;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #333d47;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .badge-duck { color: #69f0ae; }
+    .badge-goose { color: #ffffff; }
+    .badge-deer { color: #ffd54f; font-weight: bold; }
+    .badge-eagle { color: #ff5252; font-weight: bold; }
   </style>
 </head>
 <body>
 
   <div class="arcade-wrapper">
-    <div class="marquee-header">★ 8-BIT DUCK HUNT ★</div>
+    <div class="marquee-header">
+      <span>★ DUCK SHOOT ★</span>
+      <span style="font-size: 11px; color:#ffe082;">NES 8-BIT EDITION</span>
+    </div>
     
     <div class="screen-bezel">
       <canvas id="gameCanvas" width="768" height="480"></canvas>
@@ -142,16 +171,25 @@
       <div class="crt-glow"></div>
     </div>
 
+    <div class="legend-bar">
+      <span class="badge-duck">🦆 DUCK: +10</span>
+      <span class="badge-goose">🪿 GOOSE: +5</span>
+      <span class="badge-deer">🦌 DEER (MAX 2): +50</span>
+      <span class="badge-eagle">🦅 EAGLE (MAX 1): -100 PENALTY!</span>
+    </div>
+
     <div class="controls-bar">
-      <span>AIM & SHOOT: LEFT CLICK</span>
-      <button id="toggleAudioBtn" class="btn-toggle">AUDIO: ON</button>
-      <button id="toggleScanBtn" class="btn-toggle">CRT SCANLINES: ON</button>
+      <span>AIM & FIRE: LEFT CLICK</span>
+      <div style="display:flex; gap:6px;">
+        <button id="toggleAudioBtn" class="btn-toggle">AUDIO: ON</button>
+        <button id="toggleScanBtn" class="btn-toggle">SCANLINES: ON</button>
+      </div>
       <span>20 SHELLS / ROUND</span>
     </div>
   </div>
 
   <script>
-    // --- AUDIO SYNTHESIS (Web Audio API) ---
+    // --- SYNTHESIZED 8-BIT SOUND ENGINE (Web Audio API) ---
     class SoundEngine {
       constructor() {
         this.ctx = null;
@@ -174,8 +212,8 @@
         if (!this.enabled || !this.ctx) return;
         const now = this.ctx.currentTime;
 
-        // White noise burst for blast
-        const bufferSize = this.ctx.sampleRate * 0.18;
+        // Noise blast for powder discharge
+        const bufferSize = Math.floor(this.ctx.sampleRate * 0.18);
         const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const output = noiseBuffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) {
@@ -187,11 +225,11 @@
 
         const noiseFilter = this.ctx.createBiquadFilter();
         noiseFilter.type = 'lowpass';
-        noiseFilter.frequency.setValueAtTime(1400, now);
-        noiseFilter.frequency.exponentialRampToValueAtTime(100, now + 0.18);
+        noiseFilter.frequency.setValueAtTime(1600, now);
+        noiseFilter.frequency.exponentialRampToValueAtTime(80, now + 0.18);
 
         const noiseGain = this.ctx.createGain();
-        noiseGain.gain.setValueAtTime(0.7, now);
+        noiseGain.gain.setValueAtTime(0.8, now);
         noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
 
         whiteNoise.connect(noiseFilter);
@@ -199,40 +237,32 @@
         noiseGain.connect(this.ctx.destination);
         whiteNoise.start(now);
 
-        // Low thump oscillator
+        // Sub blast punch
         const osc = this.ctx.createOscillator();
         const oscGain = this.ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(140, now);
-        osc.frequency.exponentialRampToValueAtTime(30, now + 0.16);
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(32, now + 0.15);
 
-        oscGain.gain.setValueAtTime(0.8, now);
-        oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+        oscGain.gain.setValueAtTime(0.9, now);
+        oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
 
         osc.connect(oscGain);
         oscGain.connect(this.ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.18);
+        osc.stop(now + 0.16);
       }
 
-      playHit(isDuck) {
+      playDuckHit() {
         if (!this.enabled || !this.ctx) return;
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'square';
 
-        if (isDuck) {
-          // Double chirp for Duck
-          osc.frequency.setValueAtTime(440, now);
-          osc.frequency.setValueAtTime(620, now + 0.05);
-          osc.frequency.setValueAtTime(880, now + 0.1);
-        } else {
-          // Honk drop for Goose
-          osc.frequency.setValueAtTime(320, now);
-          osc.frequency.setValueAtTime(280, now + 0.06);
-          osc.frequency.setValueAtTime(340, now + 0.12);
-        }
+        osc.frequency.setValueAtTime(480, now);
+        osc.frequency.setValueAtTime(680, now + 0.05);
+        osc.frequency.setValueAtTime(940, now + 0.1);
 
         gain.gain.setValueAtTime(0.2, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
@@ -243,16 +273,87 @@
         osc.stop(now + 0.22);
       }
 
-      playMiss() {
+      playGooseHit() {
         if (!this.enabled || !this.ctx) return;
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(130, now);
-        osc.frequency.linearRampToValueAtTime(65, now + 0.12);
 
-        gain.gain.setValueAtTime(0.2, now);
+        osc.frequency.setValueAtTime(330, now);
+        osc.frequency.setValueAtTime(270, now + 0.06);
+        osc.frequency.setValueAtTime(360, now + 0.12);
+
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      }
+
+      playDeerHit() {
+        // High-energy celebratory coin / fanfare chime
+        if (!this.enabled || !this.ctx) return;
+        const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+        notes.forEach((freq, idx) => {
+          const t = this.ctx.currentTime + idx * 0.06;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, t);
+
+          gain.gain.setValueAtTime(0.28, t);
+          gain.gain.exponentialRampToValueAtTime(0.01, t + 0.18);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(t);
+          osc.stop(t + 0.19);
+        });
+      }
+
+      playEagleHit() {
+        // Harsh loud buzz / screech penalty tone
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+
+        // Low discord buzzer
+        const osc1 = this.ctx.createOscillator();
+        const osc2 = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc1.type = 'sawtooth';
+        osc2.type = 'square';
+        osc1.frequency.setValueAtTime(110, now);
+        osc1.frequency.setValueAtTime(82, now + 0.18);
+        osc2.frequency.setValueAtTime(116, now); // Inharmonic dissonance
+        osc2.frequency.setValueAtTime(87, now + 0.18);
+
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.42);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.45);
+        osc2.stop(now + 0.45);
+      }
+
+      playMiss() {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.linearRampToValueAtTime(60, now + 0.12);
+
+        gain.gain.setValueAtTime(0.18, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
 
         osc.connect(gain);
@@ -263,7 +364,7 @@
 
       playGameOver() {
         if (!this.enabled || !this.ctx) return;
-        const notes = [440, 392, 349, 311];
+        const notes = [440, 392, 349, 293];
         notes.forEach((freq, idx) => {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
@@ -271,7 +372,7 @@
           osc.type = 'square';
           osc.frequency.setValueAtTime(freq, t);
 
-          gain.gain.setValueAtTime(0.25, t);
+          gain.gain.setValueAtTime(0.24, t);
           gain.gain.exponentialRampToValueAtTime(0.01, t + 0.14);
 
           osc.connect(gain);
@@ -284,7 +385,7 @@
 
     const sound = new SoundEngine();
 
-    // --- CANVAS & GAME STATE ---
+    // --- CANVAS CONFIGURATION ---
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const scanlines = document.getElementById('scanlineOverlay');
@@ -293,7 +394,7 @@
 
     const WIDTH = canvas.width;
     const HEIGHT = canvas.height;
-    const GROUND_Y = HEIGHT - 90;
+    const GROUND_Y = HEIGHT - 80;
 
     const STATE_TITLE = 0;
     const STATE_PLAYING = 1;
@@ -304,12 +405,18 @@
     let shotsLeft = 20;
     const MAX_SHOTS = 20;
     let streak = 0;
+
+    // Stat tracking
     let ducksHit = 0;
     let geeseHit = 0;
+    let deersHit = 0;
+    let eaglesHit = 0;
     let totalShotsFired = 0;
-    let highScore = parseInt(localStorage.getItem('duckhunt_highscore') || '0', 10);
+    let highScore = parseInt(localStorage.getItem('duckhunt_highscore_v2') || '0', 10);
 
+    // Entity instances & quotas
     let birds = [];
+    let groundAnimals = [];
     let popups = [];
     let clouds = [];
     let grassBlades = [];
@@ -317,63 +424,95 @@
     let cameraShake = 0;
     let lastSpawnTime = 0;
 
-    // --- BACKGROUND DECORATION GENERATORS ---
+    // Strict game counters
+    let eagleSpawnedCount = 0; // Exactly max 1 per game
+    let eagleShotThreshold = 0; // When during the round eagle tries to appear (e.g. at 12-14 shots left)
+    let deerSpawnedCount = 0;  // Exactly max 2 per game
+    let deerShotThresholds = []; // Shot checkpoints to release deers
+
+    // --- ENVIRONMENT INIT ---
     function initClouds() {
       clouds = [
-        { x: 50, y: 40, width: 90, speed: 0.25 },
-        { x: 320, y: 70, width: 120, speed: 0.18 },
-        { x: 610, y: 30, width: 80, speed: 0.3 }
+        { x: 40, y: 35, width: 85, speed: 0.22 },
+        { x: 300, y: 65, width: 110, speed: 0.16 },
+        { x: 580, y: 30, width: 95, speed: 0.28 }
       ];
     }
 
     function initGrass() {
       grassBlades = [];
-      for (let x = 0; x < WIDTH; x += 18) {
+      for (let x = 0; x < WIDTH; x += 16) {
         grassBlades.push({
           x: x,
-          height: 14 + Math.floor(Math.random() * 14),
-          color: Math.random() > 0.4 ? '#44a821' : '#2e7d32'
+          height: 12 + Math.floor(Math.random() * 16),
+          color: Math.random() > 0.4 ? '#43a047' : '#2e7d32'
         });
       }
     }
 
-    // --- BIRD ENTITY ---
+    // --- BIRD ENTITIES (DUCK, GOOSE, EAGLE) ---
     class Bird {
-      constructor() {
-        this.isDuck = Math.random() < 0.55;
-        this.type = this.isDuck ? 'DUCK' : 'GOOSE';
-        this.points = this.isDuck ? 10 : 5;
+      constructor(typeOverride = null) {
+        if (typeOverride) {
+          this.type = typeOverride;
+        } else {
+          this.type = Math.random() < 0.55 ? 'DUCK' : 'GOOSE';
+        }
+
+        this.isEagle = this.type === 'EAGLE';
+        this.isDuck = this.type === 'DUCK';
+        this.isGoose = this.type === 'GOOSE';
+
+        if (this.isEagle) {
+          this.points = -100; // Big penalty
+          this.hitRadius = 54;
+        } else if (this.isDuck) {
+          this.points = 10;
+          this.hitRadius = 36;
+        } else {
+          this.points = 5;
+          this.hitRadius = 36;
+        }
 
         this.fromLeft = Math.random() < 0.5;
-        this.x = this.fromLeft ? -50 : WIDTH + 50;
-        this.y = 80 + Math.random() * (GROUND_Y - 180);
+        this.x = this.fromLeft ? -80 : WIDTH + 80;
 
-        // Movement speeds and flight paths
-        const baseSpeed = this.isDuck ? 2.8 + Math.random() * 1.6 : 3.6 + Math.random() * 1.8;
-        this.vx = (this.fromLeft ? 1 : -1) * baseSpeed;
-        this.vy = (Math.random() - 0.5) * 1.5;
+        // Eagles glide higher in the sky
+        if (this.isEagle) {
+          this.y = 65 + Math.random() * 90;
+          const eagleSpeed = 2.2 + Math.random() * 0.8;
+          this.vx = (this.fromLeft ? 1 : -1) * eagleSpeed;
+          this.vy = 0;
+          this.animSpeed = 0.1; // Majestic slower wing flaps
+        } else {
+          this.y = 80 + Math.random() * (GROUND_Y - 170);
+          const baseSpeed = this.isDuck ? 2.8 + Math.random() * 1.5 : 3.5 + Math.random() * 1.8;
+          this.vx = (this.fromLeft ? 1 : -1) * baseSpeed;
+          this.vy = (Math.random() - 0.5) * 1.6;
+          this.animSpeed = 0.18;
+        }
 
         this.flightTimer = Math.random() * 50;
         this.zigzagPhase = Math.random() * Math.PI * 2;
-
-        this.state = 'FLYING'; // 'FLYING' | 'STRUCK' | 'FALLING'
+        this.state = 'FLYING';
         this.stateTimer = 0;
         this.frame = 0;
-        this.animSpeed = 0.18;
-
-        this.width = 44;
-        this.height = 36;
       }
 
       update() {
         if (this.state === 'FLYING') {
           this.x += this.vx;
           this.flightTimer += 0.05;
-          this.y += Math.sin(this.flightTimer + this.zigzagPhase) * 1.6 + this.vy;
 
-          // Keep in bounds vertically
-          if (this.y < 40) { this.y = 40; this.vy = Math.abs(this.vy); }
-          if (this.y > GROUND_Y - 50) { this.y = GROUND_Y - 50; this.vy = -Math.abs(this.vy); }
+          if (this.isEagle) {
+            // Gentle high-altitude soar
+            this.y += Math.sin(this.flightTimer * 0.7) * 0.8;
+          } else {
+            // Agile zigzag
+            this.y += Math.sin(this.flightTimer + this.zigzagPhase) * 1.6 + this.vy;
+            if (this.y < 45) { this.y = 45; this.vy = Math.abs(this.vy); }
+            if (this.y > GROUND_Y - 50) { this.y = GROUND_Y - 50; this.vy = -Math.abs(this.vy); }
+          }
 
           this.frame += this.animSpeed;
         } else if (this.state === 'STRUCK') {
@@ -400,18 +539,23 @@
         const flapFrame = Math.floor(this.frame) % 3;
 
         if (this.state === 'STRUCK') {
-          // Pixel blast flash state
-          drawPixelHitEffect(this.isDuck);
+          drawHitBurst(this.isEagle ? '#ff1744' : (this.isDuck ? '#00e676' : '#fff'));
         } else if (this.state === 'FALLING') {
           ctx.rotate(facingRight ? Math.PI / 2 : -Math.PI / 2);
-          if (this.isDuck) {
-            drawDuckPixel(0, true);
-          } else {
-            drawGoosePixel(0, true);
-          }
+          if (this.isEagle) drawEaglePixel(0, true);
+          else if (this.isDuck) drawDuckPixel(0, true);
+          else drawGoosePixel(0, true);
         } else {
-          // Normal Flying
-          if (this.isDuck) {
+          if (this.isEagle) {
+            drawEaglePixel(flapFrame, false);
+            // Flashing warning tag above eagle
+            if (!facingRight) ctx.scale(-1, 1); // restore upright text
+            const warnFlash = Math.floor(Date.now() / 200) % 2 === 0;
+            ctx.font = '8px "Press Start 2P", monospace';
+            ctx.fillStyle = warnFlash ? '#ff1744' : '#ffeb3b';
+            ctx.textAlign = 'center';
+            ctx.fillText('⚠ EAGLE -100', 0, -32);
+          } else if (this.isDuck) {
             drawDuckPixel(flapFrame, false);
           } else {
             drawGoosePixel(flapFrame, false);
@@ -422,12 +566,72 @@
       }
     }
 
-    // --- PIXEL SPRITE RENDERERS ---
-    // High-contrast 8-bit procedural sprites drawn with solid unit blocks
-    function drawDuckPixel(frame, isDead) {
-      const p = 3; // Pixel scale factor
+    // --- GROUND ANIMAL (DEER) ---
+    class Deer {
+      constructor() {
+        this.points = 50;
+        this.hitRadius = 40;
+        this.fromLeft = Math.random() < 0.5;
+        this.x = this.fromLeft ? -70 : WIDTH + 70;
+        this.y = GROUND_Y - 24; // Bounds along the grass
+        this.speed = 3.6 + Math.random() * 1.4;
+        this.vx = (this.fromLeft ? 1 : -1) * this.speed;
 
-      // Head (Emerald green NES duck)
+        this.state = 'RUNNING'; // 'RUNNING' | 'STRUCK' | 'COLLAPSED'
+        this.stateTimer = 0;
+        this.frame = 0;
+        this.leapTimer = 0;
+      }
+
+      update() {
+        if (this.state === 'RUNNING') {
+          this.x += this.vx;
+          this.frame += 0.22;
+          this.leapTimer += 0.15;
+          // Galloping subtle hop
+          this.currentY = this.y - Math.abs(Math.sin(this.leapTimer)) * 9;
+        } else if (this.state === 'STRUCK') {
+          this.stateTimer--;
+          if (this.stateTimer <= 0) {
+            this.state = 'COLLAPSED';
+          }
+        }
+      }
+
+      draw() {
+        ctx.save();
+        const renderY = this.state === 'RUNNING' ? this.currentY : this.y;
+        ctx.translate(Math.round(this.x), Math.round(renderY));
+
+        const facingRight = this.vx > 0;
+        if (!facingRight) {
+          ctx.scale(-1, 1);
+        }
+
+        const runFrame = Math.floor(this.frame) % 4;
+
+        if (this.state === 'STRUCK') {
+          drawHitBurst('#ffd54f');
+        } else if (this.state === 'COLLAPSED') {
+          drawDeerPixel(0, true);
+        } else {
+          drawDeerPixel(runFrame, false);
+          // Label bonus
+          if (!facingRight) ctx.scale(-1, 1);
+          ctx.font = '8px "Press Start 2P", monospace';
+          ctx.fillStyle = '#ffd54f';
+          ctx.textAlign = 'center';
+          ctx.fillText('DEER +50', 0, -32);
+        }
+
+        ctx.restore();
+      }
+    }
+
+    // --- DETAILED PROCEDURAL PIXEL SPRITES ---
+    function drawDuckPixel(frame, isDead) {
+      const p = 3;
+      // Head (Emerald green)
       ctx.fillStyle = '#008800';
       ctx.fillRect(4 * p, -4 * p, 4 * p, 4 * p);
       ctx.fillStyle = '#00bb00';
@@ -435,9 +639,9 @@
 
       // White collar ring
       ctx.fillStyle = '#ffffff';
-      ctx.fillRect(4 * p, 0 * p, 3 * p, 1 * p);
+      ctx.fillRect(4 * p, 0, 3 * p, 1 * p);
 
-      // Beak (Orange)
+      // Orange Beak
       ctx.fillStyle = '#ff8800';
       ctx.fillRect(8 * p, -2 * p, 3 * p, 2 * p);
 
@@ -445,9 +649,9 @@
       ctx.fillStyle = '#000000';
       ctx.fillRect(6 * p, -3 * p, 1 * p, 1 * p);
 
-      // Body (Rich Brown)
+      // Body (Chestnut Brown)
       ctx.fillStyle = '#6b3e11';
-      ctx.fillRect(-2 * p, 0 * p, 7 * p, 5 * p);
+      ctx.fillRect(-2 * p, 0, 7 * p, 5 * p);
       ctx.fillStyle = '#8b5118';
       ctx.fillRect(-1 * p, 1 * p, 5 * p, 3 * p);
 
@@ -455,40 +659,36 @@
       ctx.fillStyle = '#422405';
       ctx.fillRect(-4 * p, 1 * p, 2 * p, 2 * p);
 
-      // Wing (Blue/White speculum on animated brown flap)
+      // Flapping Wing
       ctx.fillStyle = '#1e3c72';
       if (frame === 0) {
-        // Wings level
         ctx.fillRect(-1 * p, 1 * p, 4 * p, 2 * p);
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0 * p, 2 * p, 2 * p, 1 * p);
+        ctx.fillRect(0, 2 * p, 2 * p, 1 * p);
       } else if (frame === 1) {
-        // Wings up
         ctx.fillRect(-1 * p, -4 * p, 3 * p, 5 * p);
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0 * p, -2 * p, 2 * p, 2 * p);
+        ctx.fillRect(0, -2 * p, 2 * p, 2 * p);
       } else {
-        // Wings down
         ctx.fillRect(-1 * p, 4 * p, 3 * p, 4 * p);
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0 * p, 5 * p, 2 * p, 1 * p);
+        ctx.fillRect(0, 5 * p, 2 * p, 1 * p);
       }
 
-      // Yellow feet
+      // Feet
       ctx.fillStyle = '#ffb300';
       ctx.fillRect(-1 * p, 5 * p, 2 * p, 2 * p);
     }
 
     function drawGoosePixel(frame, isDead) {
       const p = 3;
-
-      // Long Graceful Goose Neck & Head (Crisp White)
+      // Neck & Head (Crisp White)
       ctx.fillStyle = '#e0e0e0';
       ctx.fillRect(3 * p, -6 * p, 3 * p, 7 * p);
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(4 * p, -5 * p, 2 * p, 5 * p);
 
-      // Beak (Vibrant Orange)
+      // Orange Beak
       ctx.fillStyle = '#ff6d00';
       ctx.fillRect(6 * p, -5 * p, 4 * p, 2 * p);
 
@@ -496,9 +696,9 @@
       ctx.fillStyle = '#000000';
       ctx.fillRect(4 * p, -5 * p, 1 * p, 1 * p);
 
-      // Sleek Goose Body (Light Gray & White)
+      // Body (Gray / White blend)
       ctx.fillStyle = '#cfd8dc';
-      ctx.fillRect(-4 * p, 0 * p, 8 * p, 5 * p);
+      ctx.fillRect(-4 * p, 0, 8 * p, 5 * p);
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(-3 * p, 1 * p, 6 * p, 3 * p);
 
@@ -506,7 +706,7 @@
       ctx.fillStyle = '#90a4ae';
       ctx.fillRect(-6 * p, 1 * p, 2 * p, 2 * p);
 
-      // Wing animation
+      // Wing
       ctx.fillStyle = '#b0bec5';
       if (frame === 0) {
         ctx.fillRect(-2 * p, 1 * p, 5 * p, 2 * p);
@@ -522,32 +722,184 @@
         ctx.fillRect(-1 * p, 5 * p, 2 * p, 2 * p);
       }
 
-      // Bright Orange Feet
+      // Feet
       ctx.fillStyle = '#ff6d00';
       ctx.fillRect(-2 * p, 5 * p, 3 * p, 2 * p);
     }
 
-    function drawPixelHitEffect(isDuck) {
+    // BIGGER EAGLE PIXEL SPRITE (Penalty target)
+    function drawEaglePixel(frame, isDead) {
+      const p = 3.6; // Significantly larger scale
+
+      // Golden/Brown Giant Torso
+      ctx.fillStyle = '#3e2723';
+      ctx.fillRect(-4 * p, -1 * p, 10 * p, 7 * p);
+      ctx.fillStyle = '#5d4037';
+      ctx.fillRect(-2 * p, 0, 7 * p, 5 * p);
+
+      // Iconic White Bald Eagle Head & Neck
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(6 * p, -5 * p, 5 * p, 6 * p);
+      ctx.fillRect(5 * p, -2 * p, 4 * p, 4 * p);
+
+      // Hooked Golden Beak
+      ctx.fillStyle = '#ffb300';
+      ctx.fillRect(11 * p, -4 * p, 3 * p, 3 * p);
+      ctx.fillRect(12 * p, -1 * p, 2 * p, 2 * p); // hooked tip down
+
+      // Piercing Eye
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(8 * p, -4 * p, 1.2 * p, 1.2 * p);
+
+      // White Fan Tail
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(-8 * p, 0, 4 * p, 4 * p);
+      ctx.fillStyle = '#cfd8dc';
+      ctx.fillRect(-7 * p, 1 * p, 2 * p, 2 * p);
+
+      // Massive Wingspan Animation
+      ctx.fillStyle = '#271915';
+      if (frame === 0) {
+        // Soaring outstretched wings
+        ctx.fillRect(-3 * p, -2 * p, 8 * p, 4 * p);
+        ctx.fillStyle = '#4e342e';
+        ctx.fillRect(-5 * p, -1 * p, 10 * p, 2 * p);
+      } else if (frame === 1) {
+        // High majestic upstroke
+        ctx.fillRect(-2 * p, -10 * p, 6 * p, 9 * p);
+        ctx.fillStyle = '#4e342e';
+        ctx.fillRect(-1 * p, -9 * p, 4 * p, 7 * p);
+        ctx.fillStyle = '#ffffff'; // feather tips
+        ctx.fillRect(0, -11 * p, 3 * p, 2 * p);
+      } else {
+        // Deep downstroke
+        ctx.fillRect(-2 * p, 5 * p, 6 * p, 8 * p);
+        ctx.fillStyle = '#4e342e';
+        ctx.fillRect(-1 * p, 6 * p, 4 * p, 6 * p);
+      }
+
+      // Powerful Yellow Talons
+      ctx.fillStyle = '#ffa000';
+      ctx.fillRect(-1 * p, 6 * p, 3 * p, 2 * p);
+      ctx.fillRect(2 * p, 6 * p, 3 * p, 2 * p);
+    }
+
+    // RUNNING DEER / STAG PIXEL SPRITE
+    function drawDeerPixel(frame, isDead) {
+      const p = 3.2;
+
+      if (isDead) {
+        // Collapsed fallen stag
+        ctx.fillStyle = '#795548';
+        ctx.fillRect(-8 * p, 2 * p, 16 * p, 5 * p);
+        ctx.fillStyle = '#4e342e';
+        ctx.fillRect(-6 * p, 5 * p, 12 * p, 2 * p);
+        return;
+      }
+
+      // Torso & Flank (Warm Buckskin Tan)
+      ctx.fillStyle = '#8d6e63';
+      ctx.fillRect(-6 * p, -3 * p, 12 * p, 6 * p);
+      ctx.fillStyle = '#a1887f';
+      ctx.fillRect(-4 * p, -2 * p, 8 * p, 4 * p);
+
+      // White chest & rump patch
+      ctx.fillStyle = '#f5f5f5';
+      ctx.fillRect(4 * p, 0, 2 * p, 3 * p);
+      ctx.fillRect(-7 * p, -3 * p, 2 * p, 3 * p);
+
+      // Graceful Neck
+      ctx.fillStyle = '#8d6e63';
+      ctx.fillRect(4 * p, -7 * p, 3 * p, 6 * p);
+
+      // Head
+      ctx.fillRect(5 * p, -9 * p, 4 * p, 3 * p);
+      // Muzzle
+      ctx.fillStyle = '#4e342e';
+      ctx.fillRect(8 * p, -8 * p, 2 * p, 2 * p);
+
+      // Eye
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(6 * p, -9 * p, 1 * p, 1 * p);
+
+      // Antlers (Majestic branching rack)
+      ctx.fillStyle = '#d7ccc8';
+      ctx.fillRect(4 * p, -13 * p, 1.5 * p, 5 * p);
+      ctx.fillRect(3 * p, -12 * p, 3 * p, 1.2 * p);
+      ctx.fillRect(2 * p, -14 * p, 1.5 * p, 3 * p);
+      ctx.fillRect(5 * p, -14 * p, 1.5 * p, 3 * p);
+
+      // Animated Galloping Legs
+      ctx.fillStyle = '#6d4c41';
+      if (frame === 0) {
+        // Gallop phase 1 (stretched)
+        ctx.fillRect(-7 * p, 3 * p, 2 * p, 6 * p);
+        ctx.fillRect(-8 * p, 7 * p, 2 * p, 3 * p);
+        ctx.fillRect(4 * p, 3 * p, 2 * p, 6 * p);
+        ctx.fillRect(6 * p, 7 * p, 2 * p, 3 * p);
+      } else if (frame === 1) {
+        // Gallop phase 2 (mid-leap tucked)
+        ctx.fillRect(-5 * p, 3 * p, 2 * p, 5 * p);
+        ctx.fillRect(-3 * p, 5 * p, 2 * p, 4 * p);
+        ctx.fillRect(2 * p, 3 * p, 2 * p, 5 * p);
+        ctx.fillRect(4 * p, 5 * p, 2 * p, 4 * p);
+      } else if (frame === 2) {
+        // Gallop phase 3 (gathered under body)
+        ctx.fillRect(-4 * p, 3 * p, 2 * p, 7 * p);
+        ctx.fillRect(2 * p, 3 * p, 2 * p, 7 * p);
+      } else {
+        // Gallop phase 4 (kick back & push)
+        ctx.fillRect(-8 * p, 3 * p, 2 * p, 7 * p);
+        ctx.fillRect(5 * p, 2 * p, 2 * p, 7 * p);
+      }
+
+      // Small Tail
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(-7 * p, -4 * p, 2 * p, 2 * p);
+    }
+
+    function drawHitBurst(tint) {
       const p = 3;
       ctx.fillStyle = '#ffffff';
-      ctx.fillRect(-5 * p, -5 * p, 10 * p, 10 * p);
-      ctx.fillStyle = isDuck ? '#00e676' : '#ffea00';
-      ctx.fillRect(-3 * p, -3 * p, 6 * p, 6 * p);
-      ctx.fillStyle = '#ff1744';
+      ctx.fillRect(-6 * p, -6 * p, 12 * p, 12 * p);
+      ctx.fillStyle = tint;
+      ctx.fillRect(-4 * p, -4 * p, 8 * p, 8 * p);
+      ctx.fillStyle = '#000000';
       ctx.fillRect(-1 * p, -1 * p, 2 * p, 2 * p);
     }
 
-    // --- SCENERY & ENVIRONMENT RENDERING ---
-    function drawSkyAndSun() {
-      // 8-bit solid sky blue
+    // --- SCENERY & TERRAIN ---
+    function drawSky() {
       ctx.fillStyle = '#3cbcfc';
       ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-      // Pixelated Retro Sun
+      // Distant pixel mountains
+      ctx.fillStyle = '#607d8b';
+      ctx.beginPath();
+      ctx.moveTo(0, GROUND_Y);
+      ctx.lineTo(120, GROUND_Y - 90);
+      ctx.lineTo(240, GROUND_Y);
+      ctx.lineTo(380, GROUND_Y - 120);
+      ctx.lineTo(520, GROUND_Y);
+      ctx.lineTo(660, GROUND_Y - 80);
+      ctx.lineTo(WIDTH, GROUND_Y);
+      ctx.closePath();
+      ctx.fill();
+
+      // Mountain snowcaps
+      ctx.fillStyle = '#eceff1';
+      ctx.beginPath();
+      ctx.moveTo(350, GROUND_Y - 95);
+      ctx.lineTo(380, GROUND_Y - 120);
+      ctx.lineTo(410, GROUND_Y - 95);
+      ctx.closePath();
+      ctx.fill();
+
+      // Retro pixel sun
       ctx.fillStyle = '#fff9c4';
-      ctx.fillRect(80, 50, 48, 48);
+      ctx.fillRect(72, 44, 46, 46);
       ctx.fillStyle = '#ffee58';
-      ctx.fillRect(86, 56, 36, 36);
+      ctx.fillRect(78, 50, 34, 34);
     }
 
     function drawPixelClouds() {
@@ -560,14 +912,12 @@
         const y = Math.round(c.y);
         const w = c.width;
 
-        // Blocky NES style cloud steps
-        ctx.fillRect(x + 16, y, w - 32, 24);
-        ctx.fillRect(x + 8, y + 8, w - 16, 24);
-        ctx.fillRect(x, y + 16, w, 20);
+        ctx.fillRect(x + 16, y, w - 32, 22);
+        ctx.fillRect(x + 8, y + 8, w - 16, 22);
+        ctx.fillRect(x, y + 16, w, 18);
 
-        // Subtle cloud shading
         ctx.fillStyle = '#e1f5fe';
-        ctx.fillRect(x + 8, y + 32, w - 16, 4);
+        ctx.fillRect(x + 8, y + 30, w - 16, 4);
         ctx.fillStyle = '#ffffff';
       });
     }
@@ -575,21 +925,21 @@
     function drawPixelTree(baseX, baseY) {
       // Trunk
       ctx.fillStyle = '#5d4037';
-      ctx.fillRect(baseX + 20, baseY - 90, 16, 90);
+      ctx.fillRect(baseX + 18, baseY - 86, 16, 86);
       ctx.fillStyle = '#3e2723';
-      ctx.fillRect(baseX + 28, baseY - 90, 8, 90);
+      ctx.fillRect(baseX + 26, baseY - 86, 8, 86);
 
       // Foliage steps
       ctx.fillStyle = '#1b5e20';
-      ctx.fillRect(baseX - 18, baseY - 140, 92, 48);
-      ctx.fillRect(baseX - 6, baseY - 170, 68, 38);
-      ctx.fillRect(baseX + 6, baseY - 192, 44, 28);
+      ctx.fillRect(baseX - 16, baseY - 136, 88, 50);
+      ctx.fillRect(baseX - 6, baseY - 166, 68, 38);
+      ctx.fillRect(baseX + 6, baseY - 188, 44, 26);
 
-      // Highlights
+      // Canopy Highlights
       ctx.fillStyle = '#2e7d32';
-      ctx.fillRect(baseX - 10, baseY - 134, 76, 20);
-      ctx.fillRect(baseX, baseY - 164, 56, 18);
-      ctx.fillRect(baseX + 10, baseY - 188, 36, 12);
+      ctx.fillRect(baseX - 8, baseY - 130, 72, 20);
+      ctx.fillRect(baseX + 2, baseY - 160, 52, 18);
+      ctx.fillRect(baseX + 12, baseY - 184, 32, 12);
     }
 
     function drawPixelBush(x, y, w) {
@@ -603,33 +953,26 @@
     }
 
     function drawGround() {
-      // Top turf grass line
+      // Top grassy layer
       ctx.fillStyle = '#43a047';
       ctx.fillRect(0, GROUND_Y, WIDTH, 16);
 
-      // Dirt field
+      // Rich dirt ground
       ctx.fillStyle = '#8d6e63';
       ctx.fillRect(0, GROUND_Y + 16, WIDTH, HEIGHT - (GROUND_Y + 16));
 
-      // Darker dirt strata
+      // Dark subsoil
       ctx.fillStyle = '#5d4037';
       ctx.fillRect(0, GROUND_Y + 36, WIDTH, HEIGHT - (GROUND_Y + 36));
 
-      // Grass fringe
+      // Animated Grass fringe
       grassBlades.forEach(blade => {
         ctx.fillStyle = blade.color;
-        ctx.fillRect(blade.x, GROUND_Y - blade.height + 6, 8, blade.height);
+        ctx.fillRect(blade.x, GROUND_Y - blade.height + 4, 8, blade.height);
       });
-
-      // Decorative pixel rocks/pebbles
-      ctx.fillStyle = '#a1887f';
-      ctx.fillRect(70, GROUND_Y + 24, 8, 4);
-      ctx.fillRect(230, GROUND_Y + 44, 10, 6);
-      ctx.fillRect(490, GROUND_Y + 28, 12, 5);
-      ctx.fillRect(680, GROUND_Y + 48, 8, 4);
     }
 
-    // --- HUD AND AMMO UI ---
+    // --- HUD AND AMMUNITION RENDERER ---
     function drawHUD() {
       // Top Status Bar
       ctx.fillStyle = '#000000';
@@ -639,173 +982,205 @@
       ctx.strokeRect(2, 2, WIDTH - 4, 36);
 
       ctx.font = '12px "Press Start 2P", monospace';
-      ctx.fillStyle = '#ffeb3b';
-      ctx.fillText(`SCORE: ${score.toString().padStart(5, '0')}`, 16, 25);
+      ctx.fillStyle = score >= 0 ? '#ffeb3b' : '#ff5252';
+      ctx.fillText(`SCORE: ${score.toString().padStart(5, score < 0 ? ' ' : '0')}`, 16, 25);
 
       ctx.fillStyle = '#00e676';
-      ctx.fillText(`HIGH: ${highScore.toString().padStart(5, '0')}`, 310, 25);
+      ctx.fillText(`HI: ${highScore.toString().padStart(5, '0')}`, 310, 25);
 
       if (streak > 1) {
         ctx.fillStyle = '#ff5252';
-        ctx.fillText(`STREAK x${streak}!`, 570, 25);
+        ctx.fillText(`STREAK x${streak}!`, 550, 25);
       } else {
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText(`DUCK:10 GOOSE:5`, 530, 25);
+        ctx.fillStyle = '#cfd8dc';
+        ctx.fillText(`20 SHOTS ROUND`, 530, 25);
       }
 
-      // Bottom Ammo Belt HUD
-      ctx.fillStyle = '#111111';
+      // Bottom Ammo Bar
+      ctx.fillStyle = '#101216';
       ctx.fillRect(0, HEIGHT - 36, WIDTH, 36);
-      ctx.strokeStyle = '#333333';
+      ctx.strokeStyle = '#2d333b';
       ctx.lineWidth = 2;
       ctx.strokeRect(2, HEIGHT - 34, WIDTH - 4, 32);
 
       ctx.fillStyle = '#ffffff';
       ctx.font = '10px "Press Start 2P", monospace';
-      ctx.fillText(`SHOTS:`, 16, HEIGHT - 16);
+      ctx.fillText(`AMMO:`, 14, HEIGHT - 15);
 
-      // Render 20 Pixel Shotgun Shells
-      const shellStartX = 96;
+      // 20 Pixel Shotgun Shells
+      const shellStartX = 84;
       for (let i = 0; i < MAX_SHOTS; i++) {
         const shellX = shellStartX + i * 16;
         const shellY = HEIGHT - 26;
         const isLoaded = i < shotsLeft;
 
         if (isLoaded) {
-          // Brass Base
-          ctx.fillStyle = '#ffd54f';
+          ctx.fillStyle = '#ffd54f'; // Brass rim
           ctx.fillRect(shellX, shellY + 10, 8, 5);
-          // Red Plastic Casing
-          ctx.fillStyle = '#d32f2f';
+          ctx.fillStyle = '#d32f2f'; // Red casing
           ctx.fillRect(shellX, shellY, 8, 10);
-          // Highlight
-          ctx.fillStyle = '#ff8a80';
+          ctx.fillStyle = '#ff8a80'; // Pixel glint
           ctx.fillRect(shellX + 1, shellY + 1, 2, 8);
         } else {
-          // Spent Gray Hull
           ctx.fillStyle = '#37474f';
           ctx.fillRect(shellX, shellY + 10, 8, 5);
-          ctx.fillStyle = '#263238';
+          ctx.fillStyle = '#212529';
           ctx.fillRect(shellX, shellY, 8, 10);
         }
       }
 
-      // Quick hit counters
-      ctx.fillStyle = '#81c784';
-      ctx.fillText(`🦆x${ducksHit}`, WIDTH - 170, HEIGHT - 16);
-      ctx.fillStyle = '#e0e0e0';
-      ctx.fillText(`🪿x${geeseHit}`, WIDTH - 80, HEIGHT - 16);
+      // Tally Badges in Bottom Corner
+      ctx.fillStyle = '#69f0ae';
+      ctx.fillText(`🦆x${ducksHit}`, WIDTH - 340, HEIGHT - 15);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(`🪿x${geeseHit}`, WIDTH - 260, HEIGHT - 15);
+      ctx.fillStyle = '#ffd54f';
+      ctx.fillText(`🦌x${deersHit}`, WIDTH - 180, HEIGHT - 15);
+      ctx.fillStyle = eaglesHit > 0 ? '#ff1744' : '#78909c';
+      ctx.fillText(`🦅x${eaglesHit}`, WIDTH - 95, HEIGHT - 15);
     }
 
-    // --- OVERLAYS & GAME STATES ---
+    // --- SCREENS ---
     function drawTitleScreen() {
-      // Dark translucent backdrop
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.78)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.82)';
       ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-      // Title Card Border
       ctx.strokeStyle = '#ffd54f';
       ctx.lineWidth = 4;
-      ctx.strokeRect(50, 40, WIDTH - 100, HEIGHT - 80);
+      ctx.strokeRect(40, 24, WIDTH - 80, HEIGHT - 48);
 
       ctx.textAlign = 'center';
-      ctx.fillStyle = '#ff5252';
-      ctx.font = '28px "Press Start 2P", monospace';
-      ctx.fillText('DUCK SHOOT', WIDTH / 2, 110);
+      ctx.fillStyle = '#ff3d00';
+      ctx.font = '26px "Press Start 2P", monospace';
+      ctx.fillText('DUCK SHOOT ARCADE', WIDTH / 2, 75);
 
-      ctx.fillStyle = '#40c4ff';
-      ctx.font = '14px "Press Start 2P", monospace';
-      ctx.fillText('8-BIT ARCADE HUNTING', WIDTH / 2, 145);
+      ctx.fillStyle = '#4fc3f7';
+      ctx.font = '12px "Press Start 2P", monospace';
+      ctx.fillText('ENHANCED WILDLIFE EDITION', WIDTH / 2, 105);
 
-      // Rules Box
-      ctx.fillStyle = '#263238';
-      ctx.fillRect(90, 175, WIDTH - 180, 140);
-      ctx.strokeStyle = '#546e7a';
+      // Rules Briefing Card
+      ctx.fillStyle = '#1c222b';
+      ctx.fillRect(70, 130, WIDTH - 140, 220);
+      ctx.strokeStyle = '#455a64';
       ctx.lineWidth = 2;
-      ctx.strokeRect(90, 175, WIDTH - 180, 140);
+      ctx.strokeRect(70, 130, WIDTH - 140, 220);
 
+      ctx.font = '10px "Press Start 2P", monospace';
       ctx.fillStyle = '#ffffff';
-      ctx.font = '11px "Press Start 2P", monospace';
-      ctx.fillText('MISSION BRIEFING:', WIDTH / 2, 205);
+      ctx.fillText('TARGET SCORECARD (20 SHOTS TOTAL):', WIDTH / 2, 158);
 
       ctx.fillStyle = '#69f0ae';
-      ctx.fillText('DUCK  = 10 POINTS (AGILE & FAST)', WIDTH / 2, 235);
-      ctx.fillStyle = '#fff59d';
-      ctx.fillText('GOOSE =  5 POINTS (SWIFT & ERRATIC)', WIDTH / 2, 260);
+      ctx.fillText('🦆 DUCK       :  +10 PTS (Common flier)', WIDTH / 2, 192);
 
-      ctx.fillStyle = '#ff80ab';
-      ctx.fillText('AMMO  = 20 SHOTGUN SHELLS TOTAL', WIDTH / 2, 285);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('🪿 GOOSE      :   +5 PTS (Swift erratic)', WIDTH / 2, 220);
 
-      // Flashing Start Prompt
-      if (Math.floor(Date.now() / 450) % 2 === 0) {
-        ctx.fillStyle = '#ffeb3b';
-        ctx.font = '14px "Press Start 2P", monospace';
-        ctx.fillText('★ CLICK SCREEN TO INSERT COIN ★', WIDTH / 2, 365);
-      }
+      ctx.fillStyle = '#ffd54f';
+      ctx.fillText('🦌 DEER [x2]  :  +50 PTS (Rare ground runner!)', WIDTH / 2, 252);
+
+      ctx.fillStyle = '#ff1744';
+      ctx.fillText('🦅 EAGLE [x1] : -100 PTS (PROTECTED BIRD! DO NOT HIT)', WIDTH / 2, 286);
 
       ctx.fillStyle = '#b0bec5';
-      ctx.font = '9px "Press Start 2P", monospace';
-      ctx.fillText('AUDIO PLAYS AUTOMATICALLY UPON CLICK', WIDTH / 2, 405);
+      ctx.fillText('Combos increase score on streaks without missing', WIDTH / 2, 324);
+
+      if (Math.floor(Date.now() / 400) % 2 === 0) {
+        ctx.fillStyle = '#ffeb3b';
+        ctx.font = '13px "Press Start 2P", monospace';
+        ctx.fillText('★ CLICK CANVAS TO START HUNT ★', WIDTH / 2, 395);
+      }
+
+      ctx.fillStyle = '#78909c';
+      ctx.font = '8px "Press Start 2P", monospace';
+      ctx.fillText('SYNTHESIZED RETRO AUDIO ACTIVE', WIDTH / 2, 430);
       ctx.textAlign = 'left';
     }
 
     function drawGameOverScreen() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.88)';
       ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
       ctx.strokeStyle = '#f44336';
       ctx.lineWidth = 4;
-      ctx.strokeRect(60, 40, WIDTH - 120, HEIGHT - 80);
+      ctx.strokeRect(50, 25, WIDTH - 100, HEIGHT - 50);
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#ff1744';
       ctx.font = '26px "Press Start 2P", monospace';
-      ctx.fillText('ROUND OVER!', WIDTH / 2, 105);
+      ctx.fillText('HUNT CONCLUDED!', WIDTH / 2, 75);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '13px "Press Start 2P", monospace';
-      ctx.fillText('OUT OF SHELLS', WIDTH / 2, 135);
+      ctx.font = '12px "Press Start 2P", monospace';
+      ctx.fillText('ALL 20 SHOTGUN SHELLS EXPENDED', WIDTH / 2, 105);
 
-      // Scorecard frame
-      ctx.fillStyle = '#1e232a';
-      ctx.fillRect(110, 160, WIDTH - 220, 165);
-      ctx.strokeStyle = '#455a64';
+      // Score Board
+      ctx.fillStyle = '#1e242d';
+      ctx.fillRect(90, 125, WIDTH - 180, 230);
+      ctx.strokeStyle = '#546e7a';
       ctx.lineWidth = 2;
-      ctx.strokeRect(110, 160, WIDTH - 220, 165);
+      ctx.strokeRect(90, 125, WIDTH - 180, 230);
 
-      const totalHits = ducksHit + geeseHit;
+      const totalHits = ducksHit + geeseHit + deersHit;
       const accuracy = totalShotsFired > 0 ? Math.round((totalHits / totalShotsFired) * 100) : 0;
 
-      ctx.fillStyle = '#ffeb3b';
-      ctx.font = '14px "Press Start 2P", monospace';
-      ctx.fillText(`FINAL SCORE: ${score}`, WIDTH / 2, 195);
+      ctx.fillStyle = score >= 0 ? '#ffeb3b' : '#ff5252';
+      ctx.font = '15px "Press Start 2P", monospace';
+      ctx.fillText(`FINAL SCORE: ${score} PTS`, WIDTH / 2, 160);
+
+      ctx.font = '10px "Press Start 2P", monospace';
+      ctx.fillStyle = '#69f0ae';
+      ctx.fillText(`🦆 DUCKS BAGGED  : ${ducksHit} (+${ducksHit * 10})`, WIDTH / 2, 195);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '10px "Press Start 2P", monospace';
-      ctx.fillText(`DUCKS BAGGED  : ${ducksHit} (x10)`, WIDTH / 2, 225);
-      ctx.fillText(`GEESE BAGGED  : ${geeseHit} (x5)`, WIDTH / 2, 248);
-      ctx.fillText(`SHOT ACCURACY : ${accuracy}%`, WIDTH / 2, 271);
+      ctx.fillText(`🪿 GEESE BAGGED  : ${geeseHit} (+${geeseHit * 5})`, WIDTH / 2, 222);
+
+      ctx.fillStyle = '#ffd54f';
+      ctx.fillText(`🦌 DEER BAGGED   : ${deersHit}/2 (+${deersHit * 50})`, WIDTH / 2, 249);
+
+      ctx.fillStyle = eaglesHit > 0 ? '#ff1744' : '#81c784';
+      ctx.fillText(`🦅 EAGLES SHOT   : ${eaglesHit}/1 (${eaglesHit > 0 ? '-100 PENALTY!' : 'CLEAN!'})`, WIDTH / 2, 276);
+
+      ctx.fillStyle = '#80deea';
+      ctx.fillText(`TARGET ACCURACY  : ${accuracy}%`, WIDTH / 2, 303);
 
       if (score >= highScore && score > 0) {
-        ctx.fillStyle = '#00e676';
-        ctx.fillText('★ NEW HIGH SCORE RECORD! ★', WIDTH / 2, 302);
+        ctx.fillStyle = '#69f0ae';
+        ctx.fillText('★ NEW ALL-TIME RECORD! ★', WIDTH / 2, 335);
       } else {
         ctx.fillStyle = '#90a4ae';
-        ctx.fillText(`CURRENT RECORD: ${highScore}`, WIDTH / 2, 302);
+        ctx.fillText(`RECORD HIGH SCORE: ${highScore}`, WIDTH / 2, 335);
       }
 
-      if (Math.floor(Date.now() / 450) % 2 === 0) {
+      if (Math.floor(Date.now() / 400) % 2 === 0) {
         ctx.fillStyle = '#00e5ff';
         ctx.font = '13px "Press Start 2P", monospace';
-        ctx.fillText('CLICK TO PLAY ANOTHER ROUND', WIDTH / 2, 370);
+        ctx.fillText('CLICK ANYWHERE TO HUNT AGAIN', WIDTH / 2, 400);
       }
       ctx.textAlign = 'left';
     }
 
-    // --- GAME LOGIC ---
-    function spawnBird() {
+    // --- GAMEPLAY ORCHESTRATION ---
+    function checkSpecialSpawns() {
       if (gameState !== STATE_PLAYING) return;
-      if (birds.length < 3 && shotsLeft > 0) {
+
+      // Eagle Spawn: Exactly 1 per game, rare mid-game appearance
+      if (eagleSpawnedCount === 0 && shotsLeft <= eagleShotThreshold && birds.filter(b => b.isEagle).length === 0) {
+        birds.push(new Bird('EAGLE'));
+        eagleSpawnedCount = 1;
+      }
+
+      // Deer Spawns: Exactly 2 per game
+      if (deerShotThresholds.length > 0 && shotsLeft <= deerShotThresholds[0]) {
+        deerShotThresholds.shift(); // Consume trigger
+        groundAnimals.push(new Deer());
+        deerSpawnedCount++;
+      }
+    }
+
+    function spawnRegularFlier() {
+      if (gameState !== STATE_PLAYING || shotsLeft <= 0) return;
+      const flyingCount = birds.filter(b => b.state === 'FLYING').length;
+      if (flyingCount < 3) {
         birds.push(new Bird());
       }
     }
@@ -816,7 +1191,7 @@
         y: y,
         text: text,
         color: color,
-        life: 42
+        life: 46
       });
     }
 
@@ -835,53 +1210,97 @@
 
       if (shotsLeft <= 0) return;
 
-      // Deduct ammo & trigger recoil
+      // Fire weapon
       shotsLeft--;
       totalShotsFired++;
       screenFlash = 4;
       cameraShake = 5;
       sound.playGunshot();
 
-      let targetHit = false;
+      let hitOccurred = false;
 
-      // Hit-check reverse order (top bird first)
-      for (let i = birds.length - 1; i >= 0; i--) {
-        const b = birds[i];
-        if (b.state !== 'FLYING') continue;
+      // 1. Check ground animals (Deer)
+      for (let i = groundAnimals.length - 1; i >= 0; i--) {
+        const d = groundAnimals[i];
+        if (d.state !== 'RUNNING') continue;
 
-        const dist = Math.hypot(mouseX - b.x, mouseY - b.y);
-        if (dist <= 38) {
-          targetHit = true;
+        const dist = Math.hypot(mouseX - d.x, mouseY - (d.currentY || d.y));
+        if (dist <= d.hitRadius) {
+          hitOccurred = true;
           streak++;
-          const comboBonus = streak > 2 ? streak * 2 : 0;
-          const hitScore = b.points + comboBonus;
+          score += d.points;
+          deersHit++;
 
-          score += hitScore;
-          if (b.isDuck) ducksHit++;
-          else geeseHit++;
+          sound.playDeerHit();
+          cameraShake = 8;
+          d.state = 'STRUCK';
+          d.stateTimer = 12;
 
-          sound.playHit(b.isDuck);
-
-          b.state = 'STRUCK';
-          b.stateTimer = 10;
-
-          const bonusLabel = comboBonus > 0 ? `+${hitScore} (x${streak})` : `+${hitScore}`;
-          addScorePopup(b.x, b.y - 10, bonusLabel, b.isDuck ? '#69f0ae' : '#ffee58');
+          addScorePopup(d.x, d.y - 20, `+${d.points} STAG!`, '#ffd54f');
           break;
         }
       }
 
-      if (!targetHit) {
+      // 2. Check fliers (Duck, Goose, Eagle) if no deer hit
+      if (!hitOccurred) {
+        for (let i = birds.length - 1; i >= 0; i--) {
+          const b = birds[i];
+          if (b.state !== 'FLYING') continue;
+
+          const dist = Math.hypot(mouseX - b.x, mouseY - b.y);
+          if (dist <= b.hitRadius) {
+            hitOccurred = true;
+
+            if (b.isEagle) {
+              // PENALTY TARGET!
+              streak = 0;
+              score += b.points; // -100
+              eaglesHit++;
+              sound.playEagleHit();
+              cameraShake = 16; // violent recoil on foul
+              screenFlash = 8;
+
+              b.state = 'STRUCK';
+              b.stateTimer = 15;
+              addScorePopup(b.x, b.y - 10, '-100 EAGLE PENALTY!', '#ff1744');
+            } else {
+              // Duck or Goose
+              streak++;
+              const comboBonus = streak > 2 ? (streak - 1) * 2 : 0;
+              const hitScore = b.points + comboBonus;
+              score += hitScore;
+
+              if (b.isDuck) {
+                ducksHit++;
+                sound.playDuckHit();
+              } else {
+                geeseHit++;
+                sound.playGooseHit();
+              }
+
+              b.state = 'STRUCK';
+              b.stateTimer = 10;
+              const bonusLabel = comboBonus > 0 ? `+${hitScore} (x${streak})` : `+${hitScore}`;
+              addScorePopup(b.x, b.y - 10, bonusLabel, b.isDuck ? '#69f0ae' : '#ffffff');
+            }
+            break;
+          }
+        }
+      }
+
+      if (!hitOccurred) {
         streak = 0;
         sound.playMiss();
         addScorePopup(mouseX, mouseY, 'MISS', '#ff5252');
       }
 
+      // Check special spawns tied to remaining ammo
+      checkSpecialSpawns();
+
       if (shotsLeft <= 0) {
-        // Wait briefly for birds to drop, then conclude round
         setTimeout(() => {
           endGame();
-        }, 850);
+        }, 900);
       }
     }
 
@@ -892,13 +1311,31 @@
       streak = 0;
       ducksHit = 0;
       geeseHit = 0;
+      deersHit = 0;
+      eaglesHit = 0;
       totalShotsFired = 0;
+
       birds = [];
+      groundAnimals = [];
       popups = [];
       screenFlash = 0;
       cameraShake = 0;
       lastSpawnTime = Date.now();
-      birds.push(new Bird());
+
+      // Configure quota thresholds for this round
+      eagleSpawnedCount = 0;
+      // Eagle spawns mid-game randomly between 13 and 8 shots left
+      eagleShotThreshold = Math.floor(Math.random() * 6) + 8;
+
+      deerSpawnedCount = 0;
+      // 2 deers spaced out across the 20 shots (e.g. shot 17 and shot 6)
+      deerShotThresholds = [
+        Math.floor(Math.random() * 4) + 15, // deer 1 early-mid
+        Math.floor(Math.random() * 5) + 4   // deer 2 late
+      ];
+
+      // Initial duck flier
+      birds.push(new Bird('DUCK'));
     }
 
     function endGame() {
@@ -907,12 +1344,12 @@
 
       if (score > highScore) {
         highScore = score;
-        localStorage.setItem('duckhunt_highscore', highScore.toString());
+        localStorage.setItem('duckhunt_highscore_v2', highScore.toString());
       }
       sound.playGameOver();
     }
 
-    // --- EVENT LISTENERS ---
+    // --- INPUT LISTENERS ---
     canvas.addEventListener('mousedown', (e) => {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
@@ -934,60 +1371,76 @@
       e.stopPropagation();
       if (scanlines.style.display === 'none') {
         scanlines.style.display = 'block';
-        toggleScanBtn.textContent = 'CRT SCANLINES: ON';
+        toggleScanBtn.textContent = 'SCANLINES: ON';
       } else {
         scanlines.style.display = 'none';
-        toggleScanBtn.textContent = 'CRT SCANLINES: OFF';
+        toggleScanBtn.textContent = 'SCANLINES: OFF';
       }
     });
 
-    // --- MAIN GAME LOOP ---
-    function gameLoop(timestamp) {
-      // Periodic spawn
-      if (gameState === STATE_PLAYING && Date.now() - lastSpawnTime > 1150) {
-        spawnBird();
+    // --- MAIN ENGINE LOOP ---
+    function gameLoop() {
+      // Regular flier spawn cadence
+      if (gameState === STATE_PLAYING && Date.now() - lastSpawnTime > 1200) {
+        spawnRegularFlier();
+        checkSpecialSpawns();
         lastSpawnTime = Date.now();
       }
 
-      // Shake & Recoil
       ctx.save();
+
+      // Camera Recoil Shake
       if (cameraShake > 0) {
         const sx = (Math.random() - 0.5) * cameraShake * 2;
         const sy = (Math.random() - 0.5) * cameraShake * 2;
         ctx.translate(sx, sy);
-        cameraShake *= 0.85;
+        cameraShake *= 0.84;
         if (cameraShake < 0.2) cameraShake = 0;
       }
 
-      // Scenery background
-      drawSkyAndSun();
+      // Background Sky & Elements
+      drawSky();
       drawPixelClouds();
-      drawPixelTree(60, GROUND_Y + 10);
-      drawPixelTree(620, GROUND_Y + 10);
-      drawPixelBush(220, GROUND_Y + 10, 80);
-      drawPixelBush(450, GROUND_Y + 10, 95);
+      drawPixelTree(45, GROUND_Y + 12);
+      drawPixelTree(635, GROUND_Y + 12);
 
-      // Birds
+      // Fliers (fly across the sky layer)
       for (let i = birds.length - 1; i >= 0; i--) {
         const b = birds[i];
         b.update();
         b.draw();
 
-        // Remove off-screen or grounded birds
         if (b.state === 'FALLING' && b.y > GROUND_Y + 30) {
           birds.splice(i, 1);
-        } else if (b.state === 'FLYING' && (b.x < -80 || b.x > WIDTH + 80)) {
+        } else if (b.state === 'FLYING' && (b.x < -120 || b.x > WIDTH + 120)) {
           birds.splice(i, 1);
         }
       }
 
-      // Foreground terrain (birds fly behind bushes/trees)
+      // Foreground Terrain
       drawGround();
 
-      // Hit & Miss text Popups
+      // Ground Animals (Deers gallop along the grass in front of trees)
+      for (let i = groundAnimals.length - 1; i >= 0; i--) {
+        const d = groundAnimals[i];
+        d.update();
+        d.draw();
+
+        if (d.state === 'RUNNING' && (d.x < -100 || d.x > WIDTH + 100)) {
+          groundAnimals.splice(i, 1);
+        } else if (d.state === 'COLLAPSED' && d.stateTimer < -120) {
+          groundAnimals.splice(i, 1);
+        }
+      }
+
+      // Decorative Foreground Bushes
+      drawPixelBush(210, GROUND_Y + 8, 85);
+      drawPixelBush(460, GROUND_Y + 8, 95);
+
+      // Floating Hit & Miss Score Popups
       for (let i = popups.length - 1; i >= 0; i--) {
         const p = popups[i];
-        ctx.font = '11px "Press Start 2P", monospace';
+        ctx.font = '10px "Press Start 2P", monospace';
         ctx.fillStyle = p.color;
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 3;
@@ -999,7 +1452,7 @@
         if (p.life <= 0) popups.splice(i, 1);
       }
 
-      // Screen Recoil Flash
+      // Gunflash on shot
       if (screenFlash > 0) {
         ctx.fillStyle = `rgba(255, 255, 255, ${screenFlash * 0.12})`;
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
@@ -1008,7 +1461,7 @@
 
       ctx.restore();
 
-      // HUD and Menus
+      // Overlays & HUD
       drawHUD();
 
       if (gameState === STATE_TITLE) {
@@ -1020,7 +1473,7 @@
       requestAnimationFrame(gameLoop);
     }
 
-    // Initialize environment and start loop
+    // Bootstrap
     initClouds();
     initGrass();
     requestAnimationFrame(gameLoop);
